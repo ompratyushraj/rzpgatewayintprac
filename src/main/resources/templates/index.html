@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Razorpay Payment Form</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-ui/4.11.0/styles.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #333333;  /* Dark background color */
+      color: white;  /* Light text for contrast */
+      padding: 30px;
+      margin: 0;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #444444;  /* Slightly lighter dark background for the form */
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+
+    /* Ensure .MuiTextField-root takes full width and margin */
+    .MuiTextField-root {
+      margin-bottom: 20px;
+      width: 100%;  /* Ensures the input container spans full width */
+    }
+
+    /* Input Fields */
+    .MuiTextField-root input[type="text"],
+    .MuiTextField-root input[type="email"],
+    .MuiTextField-root input[type="tel"],
+    .MuiTextField-root input[type="number"],
+    .MuiTextField-root select {
+      background-color: transparent;
+      color: white;
+      border: none;  /* Make borders invisible */
+      border-bottom: 4px solid #5469d4;  /* Blue bottom border */
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;  /* Ensure input fields stretch across full width */
+      outline: none;
+      box-sizing: border-box;  /* Ensure padding is included in the width */
+    }
+
+    /* Focused Input Fields */
+    .MuiTextField-root input[type="text"]:focus,
+    .MuiTextField-root input[type="email"]:focus,
+    .MuiTextField-root input[type="tel"]:focus,
+    .MuiTextField-root input[type="number"]:focus,
+    .MuiTextField-root select:focus {
+      border-bottom: 4px solid #5469d4;  /* Blue bottom border on focus */
+    }
+
+    select {
+      background-color: transparent;
+    }
+
+    /* Style for the Category dropdown options */
+    select option {
+      color: black;  /* Make the text inside options black */
+      background-color: transparent;  /* Keep background transparent */
+    }
+
+    /* Button */
+    .MuiButton-root {
+      background-color: #5469d4;  /* Razorpay's blue color */
+      color: white;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;  /* Remove border */
+      border-radius: 30px;  /* Rounded corners */
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .MuiButton-root:hover {
+      background-color: #4051b5;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5rem;  /* Slightly smaller heading on small screens */
+      }
+
+      .form-container {
+        padding: 15px;  /* Reduce padding for smaller screens */
+        margin: 10px;
+      }
+
+      .MuiTextField-root input[type="text"],
+      .MuiTextField-root input[type="email"],
+      .MuiTextField-root input[type="tel"],
+      .MuiTextField-root input[type="number"],
+      .MuiTextField-root select {
+        font-size: 14px;  /* Reduce input font size */
+      }
+
+      .MuiButton-root {
+        font-size: 14px;  /* Reduce button font size */
+        padding: 10px;  /* Reduce button padding */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 10px;  /* Further reduce padding for very small screens */
+        margin: 5px;
+      }
+
+      h1 {
+        font-size: 1.2rem;  /* Further reduce heading size */
+      }
+
+      .MuiButton-root {
+        font-size: 12px;  /* Reduce button font size even more */
+        padding: 8px;  /* Reduce button padding */
+      }
+
+      /* Adjust form fields on very small screens */
+      .MuiTextField-root input[type="text"],
+      .MuiTextField-root input[type="email"],
+      .MuiTextField-root input[type="tel"],
+      .MuiTextField-root input[type="number"],
+      .MuiTextField-root select {
+        font-size: 12px;  /* Further reduce input font size */
+        padding: 8px;  /* Reduce input padding */
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <h1>Razorpay Payment Gateway <br>Form</h1>
+  <form id="paymentForm" onsubmit="event.preventDefault(); initiatePayment();">
+    <div class="MuiTextField-root">
+      <label for="name" style="color: white;">Full Name</label>
+      <input type="text" id="name" name="name" required placeholder="Enter your name">
+    </div>
+
+    <div class="MuiTextField-root">
+      <label for="contact" style="color: white;">Contact Number</label>
+      <input type="tel" id="contact" name="contact" required placeholder="Enter your contact number" pattern="^\d{10}$">
+    </div>
+
+    <div class="MuiTextField-root">
+      <label for="email" style="color: white;">Email Address</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email">
+    </div>
+
+    <div class="MuiTextField-root">
+      <label for="category" style="color: white;">Category</label>
+      <select id="category" name="category" required>
+        <option value="pain_relief">Pain Relief</option>
+        <option value="antibiotics">Antibiotics</option>
+        <option value="cardiovascular">Cardiovascular</option>
+        <option value="diabetes_care">Diabetes Care</option>
+        <option value="cough_and_cold">Cough and Cold</option>
+        <option value="digestive_health">Digestive Health</option>
+        <option value="skin_care">Skin Care</option>
+        <option value="wound_care">Wound Care</option>
+        <option value="surgical_supplies">Surgical Supplies</option>
+        <option value="vaccines">Vaccines</option>
+        <option value="oral_health">Oral Health</option>
+        <option value="eyecare">Eyecare</option>
+      </select>
+    </div>
+
+    <div class="MuiTextField-root">
+      <label for="amount" style="color: white;">Amount</label>
+      <input type="number" id="amount" name="amount" required min="1" placeholder="Enter amount">
+    </div>
+
+    <button type="submit" class="MuiButton-root">
+      Initiate Payment
+    </button>
+  </form>
+</div>
+
+<script>
+  function initiatePayment() {
+    var name = document.getElementById("name").value;
+    var contact = document.getElementById("contact").value;
+    var email = document.getElementById("email").value;
+    var category = document.getElementById("category").value;
+    var amount = document.getElementById("amount").value;
+
+    if (amount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    var options = {
+      "key": "YOUR_RAZORPAY_KEY",  // Add your Razorpay key here
+      "amount": amount * 100,  // amount is in paise, so multiply by 100
+      "currency": "INR",
+      "name": name,
+      "description": "Payment for " + category,
+      "image": "https://your-logo-url.com/logo.png",  // Optional: Logo URL
+      "prefill": {
+        "name": name,
+        "email": email,
+        "contact": contact
+      },
+      "handler": function (response) {
+        alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+      },
+      "theme": {
+        "color": "#5469d4"  // Razorpay's primary blue color
+      }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+</script>
+</body>
+</html>
