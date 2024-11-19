@@ -48,22 +48,29 @@ public class CustomerService {
 
     public CustomerOrder updateOrder(Map<String, String> responsePayLoad) {
         String razorPayOrderId = responsePayLoad.get("razorpay_order_id");
-        String paymentStatus = responsePayLoad.get("razorpay_payment_status");
+        String razorPayPaymentStatus = responsePayLoad.get("razorpay_payment_status");
+
+        // Optional: Log the response to confirm structure
+        System.out.println("razorPayOrderId Payload: " + razorPayOrderId);
+        System.out.println("razorPayPaymentStatus Payload: " + razorPayPaymentStatus);
+        System.out.println("Response Payload: " + responsePayLoad);
 
         CustomerOrder order = customerOrderRepository.findByRazorpayOrderId(razorPayOrderId);
 
-        // Handle payment status
-        if ("success".equalsIgnoreCase(paymentStatus)) {
+        // Check payment status and update order accordingly
+        if ("success".equalsIgnoreCase(razorPayPaymentStatus)) {
             order.setOrderStatus("PAYMENT_COMPLETED");
         } else {
             order.setOrderStatus("PAYMENT_FAILED");
         }
 
-        CustomerOrder updatedOrder = customerOrderRepository.save(order);
+        System.out.println("Response Payload: " + responsePayLoad);
 
-        // Send email or notification logic can be added here
+        // Save the updated order status
+        CustomerOrder updatedOrder = customerOrderRepository.save(order);
 
         return updatedOrder;
     }
+
 
 }
