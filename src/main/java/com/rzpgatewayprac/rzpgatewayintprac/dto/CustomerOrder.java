@@ -16,7 +16,7 @@ public class CustomerOrder {
     private Integer orderId;
     private String name;
     private String email;
-    private Integer phoneno;
+    private Long contact;
     private String category;
     private Integer amount;
     private String orderStatus;

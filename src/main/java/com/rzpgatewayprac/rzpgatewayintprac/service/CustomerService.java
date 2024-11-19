@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
-public class CustomerOrderService {
+public class CustomerService {
 
     @Autowired
     private CustomerOrderRepository customerOrderRepository;
@@ -23,10 +25,13 @@ public class CustomerOrderService {
     private String razorPaySecret;
 
     private RazorpayClient client;
-    public CustomerOrder createOrder(CustomerOrder customerOrder) throws RazorpayException {
 
+    public CustomerOrder createOrder(CustomerOrder customerOrder) throws RazorpayException {
         JSONObject orderRequest = new JSONObject();
         orderRequest.put("amount", customerOrder.getAmount() * 100); // amount in paisa
+        orderRequest.put("currency", "INR");
+        orderRequest.put("receipt", customerOrder.getEmail());
+
         this.client = new RazorpayClient(razorPayKey, razorPaySecret);
 
         // Create order in razorpay.
@@ -39,6 +44,26 @@ public class CustomerOrderService {
         customerOrderRepository.save(customerOrder);
 
         return customerOrder;
+    }
+
+    public CustomerOrder updateOrder(Map<String, String> responsePayLoad) {
+        String razorPayOrderId = responsePayLoad.get("razorpay_order_id");
+        String paymentStatus = responsePayLoad.get("razorpay_payment_status");
+
+        CustomerOrder order = customerOrderRepository.findByRazorpayOrderId(razorPayOrderId);
+
+        // Handle payment status
+        if ("success".equalsIgnoreCase(paymentStatus)) {
+            order.setOrderStatus("PAYMENT_COMPLETED");
+        } else {
+            order.setOrderStatus("PAYMENT_FAILED");
+        }
+
+        CustomerOrder updatedOrder = customerOrderRepository.save(order);
+
+        // Send email or notification logic can be added here
+
+        return updatedOrder;
     }
 
 }
