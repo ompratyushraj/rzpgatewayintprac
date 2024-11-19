@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Failed - Razorpay</title>
+    <title>Payment Success - Razorpay</title>
     <style>
         /* Reset some default styles */
         * {
@@ -61,7 +61,7 @@
 
         .button {
             display: inline-block;
-            background-color: #dc3545; /* Red button for failure */
+            background-color: #19a337; /* Red button for success */
             color: white;
             font-size: 1.1rem;
             padding: 12px 30px;
@@ -72,7 +72,7 @@
         }
 
         .button:hover {
-            background-color: #c82333; /* Darker red when hovered */
+            background-color: #5469d4; /* Darker red when hovered */
         }
 
         /* Animations */
@@ -115,14 +115,24 @@
 
 <div class="container">
     <div class="icon">
-        <i class="fas fa-times-circle"></i> <!-- Red "X" for failure -->
+        <i class="fas fa-check-circle"></i>
     </div>
-    <h1>Payment Failed!</h1>
-    <p>There was an issue processing your payment through Razorpay.</p>
-    <p>Order Status: FAILED</p>
-    <p>Please check your payment details or try again later.</p>
+    <h1>Payment Successful!</h1>
+    <p>Your payment has been successfully processed through Razorpay.</p>
+    <p>Order Status: CONFIRMED</p>
+    <p>You will receive a confirmation email shortly.</p>
     <a href="/" class="button">Go to Homepage</a>
 </div>
+<!--<div class="container">-->
+<!--    <div class="icon">-->
+<!--        <i class="fas fa-times-circle"></i> &lt;!&ndash; Red "X" for failure &ndash;&gt;-->
+<!--    </div>-->
+<!--    <h1>Payment Failed!</h1>-->
+<!--    <p>There was an issue processing your payment through Razorpay.</p>-->
+<!--    <p>Order Status: FAILED</p>-->
+<!--    <p>Please check your payment details or try again later.</p>-->
+<!--    <a href="/" class="button">Go to Homepage</a>-->
+<!--</div>-->
 
 <!-- Include Font Awesome for the "X" icon -->
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>

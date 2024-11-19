@@ -2,7 +2,7 @@ package com.rzpgatewayprac.rzpgatewayintprac.controller;
 
 import com.rzpgatewayprac.rzpgatewayintprac.dto.CustomerOrder;
 import com.rzpgatewayprac.rzpgatewayintprac.service.CustomerService;
-import com.razorpay.SignatureVerificationException;
+import com.rzpgatewayprac.rzpgatewayintprac.exception.SignatureVerificationException; // Import custom exception
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,12 +47,13 @@ public class CustomerController {
             CustomerOrder updatedOrder = customerService.updateOrder(resPayLoad);
 
             // Handle order status based on payment outcome
-            if ("PAYMENT_FAILED".equals(updatedOrder.getOrderStatus())) {
+            if ("PAYMENT_COMPLETED".equals(updatedOrder.getOrderStatus())) {
                 return "paymentFailed"; // Show payment failed page
             }
 
             return "success"; // Redirect to success page
         } catch (SignatureVerificationException e) {
+            // Handle signature verification exception
             System.out.println("Signature verification failed: " + e.getMessage());
             return "paymentFailed"; // Redirect to failure page on verification error
         }
